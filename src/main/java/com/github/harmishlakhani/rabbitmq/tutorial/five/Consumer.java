@@ -1,4 +1,4 @@
-package com.github.harmishlakhani.rabbitmq.tutorial.two;
+package com.github.harmishlakhani.rabbitmq.tutorial.five;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import com.rabbitmq.client.Envelope;
 
 public class Consumer 
 {
-	private final static String EXCHANGE_NAME = "logs";
+	private final static String EXCHANGE_NAME = "topic_logs";
 	private final static String HOST = "localhost";
 	
     public static void main( String[] args ) throws Exception
@@ -22,9 +22,17 @@ public class Consumer
     	Connection connection = connectionFactory.newConnection();
     	Channel channel = connection.createChannel();
     	
-    	channel.exchangeDeclare(EXCHANGE_NAME, "fanout");
+    	channel.exchangeDeclare(EXCHANGE_NAME, "topic");
     	String queueName = channel.queueDeclare().getQueue();
-    	channel.queueBind(queueName, EXCHANGE_NAME, "");
+    	
+    	if (args.length < 1){
+    		System.err.println("Usage: ReceiveLogsTopic [binding_key]...");
+    	    System.exit(1);
+    	}
+    	
+    	for(String bindingKey : args){
+    	    channel.queueBind(queueName, EXCHANGE_NAME, bindingKey);
+    	}
     	
     	System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
     	

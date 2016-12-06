@@ -1,4 +1,4 @@
-package com.github.harmishlakhani.rabbitmq.tutorial.two;
+package com.github.harmishlakhani.rabbitmq.tutorial.three;
 
 import java.io.BufferedReader;
 import java.io.IOException;
